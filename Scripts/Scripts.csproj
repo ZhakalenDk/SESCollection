@@ -109,7 +109,11 @@
   <ItemGroup>
     <Compile Include="Power Management\BatteryStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TerminalConfiguration\TerminalNamingRule.cs" />
+    <Compile Include="TerminalConfiguration\TRM.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="TerminalConfiguration\TRMAPI.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

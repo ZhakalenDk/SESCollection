@@ -69,6 +69,7 @@ namespace BatteryStatus
                             [2] - %%  - Used on batteries to force the formatting into plain procentage
                             [3] - %s  - Used on screens to force the formatting into displaying only 4 batteries at a time (Useful for flat LCD's)
                             [4] - %sl - Used on screens to force the formatting into displaying only one batteries at a time (useful for large grid flat and corner LCD's)
+                            [5] - %w  - used on screens to force the display to show in widescreen 
 
                 <Error Handling>
                     The script will indicate if it's running by showing an animation in the PB's message area.
@@ -76,7 +77,7 @@ namespace BatteryStatus
                     If this is the case try and do every step again. Something might have gone wrong in the process.
 
                     Otherwise look at the error message in the PB's message are. It will tell you exactly what the problem is.
-                    In the case the error message does not update to "None" even though every mistake has been corrected -> Recompile the script.
+                    In the case the error message does not update to "None" even though every mistake has been corrected -> Recompile the script or contact me (Pied Piper)
         */
         /*------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
         #endregion
@@ -162,11 +163,20 @@ namespace BatteryStatus
         private void Print_Status ( IMyTextPanel _LCD )
         {
             bool useGraphics = false;
-            if ( _LCD.CustomName.Contains ( "%#" ) )
+            bool isWideScreen = false;
+            if ( _LCD.CustomData.Contains ( "%#" ) )
             {
                 useGraphics = true;
             }
-            _LCD.WritePublicText ( Battery_Status ( Get_Batteries (), useGraphics, ( ( _LCD.CustomName.Contains ( "%s" ) ) ? ( ( ( _LCD.CustomName.Contains ( "%sl" ) ) ? ( 1 ) : ( 4 ) ) ) : ( 22 ) ) ) );
+
+            if ( _LCD.CustomData.Contains ( "%w" ) )
+            {
+                isWideScreen = true;
+            }
+
+            int allowedLines = ( ( _LCD.CustomData.Contains ( "%s" ) ) ? ( ( ( _LCD.CustomData.Contains ( "%sl" ) ) ? ( 1 ) : ( 4 ) ) ) : ( 22 ) );
+
+            _LCD.WritePublicText ( Battery_Status ( Get_Batteries (), useGraphics, allowedLines, isWideScreen ) );
         }
 
         /// <summary>
@@ -210,7 +220,7 @@ namespace BatteryStatus
         /// <param name="_useGraphics">Wether or not to render a ghrafical representation of the percentage</param>
         /// <param name="_amountOfLinesAllowed">The amount of lines that are allowed ot be printed</param>
         /// <returns></returns>
-        private string Battery_Status ( List<IMyBatteryBlock> _batteries, bool _useGraphics, int _amountOfLinesAllowed )
+        private string Battery_Status ( List<IMyBatteryBlock> _batteries, bool _useGraphics, int _amountOfLinesAllowed, bool _isWideScreen )
         {
             #region Display prototype
             /*
@@ -277,8 +287,10 @@ namespace BatteryStatus
             float overAllCurrent = 0;
             float overAllPercentage = 0;
 
+            //int LineNumber = 0;
 
-            string formatString = $"|---------[Battery Status]---------|\n" /*string.Empty*/;
+
+            string formatString = $"|{CreateFormat ( ( ( _isWideScreen ) ? ( 27 ) : ( 9 ) ), '-' )}[Battery Status]{CreateFormat ( ( ( _isWideScreen ) ? ( 27 ) : ( 9 ) ), '-' )}|\n" /*string.Empty*/;
 
             //  If the current screen allows less lines than there's batteries in the list. Execute this.
             if ( _batteries.Count > _amountOfLinesAllowed )
@@ -290,9 +302,10 @@ namespace BatteryStatus
                     Scroll_Page ();
                 }
             }
+
             if ( _batteries.Count != 0 )    //  Only execute this if there's batteries on the grid
             {
-                for ( int i = 0; i < ( ( _batteries.Count > _amountOfLinesAllowed ) ? ( _amountOfLinesAllowed ) : ( _batteries.Count ) ); i++ )
+                for ( int i = 0, j = 21; i < ( ( _batteries.Count > _amountOfLinesAllowed ) ? ( _amountOfLinesAllowed ) : ( _batteries.Count ) ); i++ )
                 {
                     string digits = string.Empty;
                     if ( i < 100 )  //  If 'i' is less than 100, add a '0' in front of the string
@@ -304,27 +317,87 @@ namespace BatteryStatus
 
                         digits += '0';
                     }
-                    /*                   Line Number                                        If less batteries than allowed lines            use this              else use this        bool for graphic     */
-                    formatString += $"| [{digits}{i + 1}] {Formatted_Battery_String ( ( ( _batteries.Count < _amountOfLinesAllowed ) ? ( _batteries [i] ) : ( this.G_Batteries [i] ) ), _useGraphics ) } |\n";    //  The actual information we want to send out
+
+                    /*                                            If less batteries than allowed lines            use this              else use this        bool for graphic     */
+                    string leftSide = Formatted_Battery_String ( ( ( _batteries.Count < _amountOfLinesAllowed ) ? ( _batteries [i] ) : ( this.G_Batteries [i] ) ), _useGraphics );
+                    string rightSide = string.Empty;
+                    if ( _isWideScreen && i > 21 )
+                    {
+                        rightSide = $"[{digits}{j + 1}]{Formatted_Battery_String ( ( ( _batteries.Count < _amountOfLinesAllowed ) ? ( _batteries [j] ) : ( this.G_Batteries [j] ) ), _useGraphics )}";
+                        j++;
+                    }
+                    else if ( _isWideScreen && i < 21 )
+                    {
+                        rightSide = $"{CreateFormat ( 33, ' ' )} |";
+                    }
+
+
+
+                    formatString += $"| [{digits}{i + 1}] {leftSide} | {rightSide}\n";    //  The actual information we want to send out
 
                     overAllMax += _batteries [i].MaxStoredPower;
                     overAllCurrent += _batteries [i].CurrentStoredPower;
                 }
 
-                formatString += Blank_Lines ( ( _amountOfLinesAllowed - _batteries.Count ) );
+                formatString += $"{Blank_Lines ( ( _amountOfLinesAllowed - _batteries.Count ), _isWideScreen )}";
+
+                overAllPercentage = ( overAllCurrent / overAllMax ) * 100;
+
             }
             else    //  If theres no batteries, execute this part
             {
                 formatString += "|       No Batteries on grid       |\n";
-                formatString += Blank_Lines ( _amountOfLinesAllowed );
+                formatString += Blank_Lines ( ( _amountOfLinesAllowed - 1 ), _isWideScreen );
             }
 
-            overAllPercentage = ( overAllCurrent / overAllMax ) * 100;
+
+
+            string endStringFormat = $"{CreateFormat ( ( ( _isWideScreen ) ? ( 29 ) : ( 11 ) ), '-' )}";
 
             /*                  if graphic is prefere                              use this                                                                     else use this                                 */
-            formatString += $"|{( ( _useGraphics ) ? ( $"-----------[{Render_Graphics ( overAllPercentage )}]-----------" ) : ( $"-------------[{overAllPercentage.ToString ( "000.00" )}]-------------" ) )}|";
+            formatString += $"|{( ( _useGraphics ) ? ( $"{endStringFormat}[{Render_Graphics ( overAllPercentage )}]{endStringFormat}" ) : ( $"--{endStringFormat}[{overAllPercentage.ToString ( "000.00" )}]--{endStringFormat}" ) )}|";
 
             return formatString;
+        }
+
+        private void Insert_Procentage ( IMyBatteryBlock _battery, float _percentage )
+        {
+            if ( _battery.CustomName.Contains("<") )
+            {
+                string start = _battery.CustomName.Split ( '<' ) [0];
+                string end = _battery.CustomName.Split ( '>' ) [1];
+                _battery.CustomName = $"{start}<{_percentage.ToString ( "F" )}%>{end}";
+            }
+            else
+            {
+                _battery.CustomName = "Battery <>";
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_length">The length of the sequence</param>
+        /// <param name="_symbol">THe symbol to print</param>
+        /// <returns></returns>
+        private string CreateFormat ( int _length, char _symbol )
+        {
+            string format = string.Empty;
+            for ( int i = 0; i < _length; i++ )
+            {
+                format += _symbol;
+            }
+
+            return format;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private int Line_Number ()
+        {
+            return 0;
         }
 
         /// <summary>
@@ -342,12 +415,20 @@ namespace BatteryStatus
         /// </summary>
         /// <param name="_amount">How many lines should be returned</param>
         /// <returns></returns>
-        private string Blank_Lines ( int _amount )
+        private string Blank_Lines ( int _amount, bool _isWidescreen )
         {
             string blankLines = string.Empty;
             for ( int i = 0; i < _amount; i++ )
             {
-                blankLines += "|                                  |\n";
+                if ( _isWidescreen )
+                {
+                    blankLines += "|                                  |                                  |\n";
+                }
+                else
+                {
+                    blankLines += "|                                  |\n";
+                }
+
             }
 
             return blankLines;
@@ -361,11 +442,11 @@ namespace BatteryStatus
         /// <returns></returns>
         private string Formatted_Battery_String ( IMyBatteryBlock _battery, bool _useGraphics )
         {
-            if ( _battery.CustomName.Contains ( "%#" ) )
+            if ( _battery.CustomData.Contains ( "%#" ) )
             {
                 _useGraphics = true;
             }
-            else if ( _battery.CustomName.Contains ( "%%" ) )
+            else if ( _battery.CustomData.Contains ( "%%" ) )
             {
                 _useGraphics = false;
             }
@@ -377,9 +458,9 @@ namespace BatteryStatus
 
             float percentage = ( currentStored / maxStored ) * 100;
 
-            string displayName = ( ( _battery.CustomData.Length != 0 ) ? ( _battery.CustomData ) : ( "Battery" ) ); //  The name to be displayed on screen
+            Insert_Procentage ( _battery, percentage );
 
-            return $"{displayName}   :{( ( _useGraphics ) ? ( $"   [{Render_Graphics ( percentage )}]" ) : ( $"-------[{percentage.ToString ( "000.00" )}]" ) )}";
+            return $"{( ( _battery.CustomName.Length > 7 ) ? ( _battery.CustomName.Remove ( 7, ( _battery.CustomName.Length - 7 ) ) ) : ( _battery.CustomName ) )}{CreateFormat ( ( 7 - _battery.CustomName.Length ), ' ' )}   :{( ( _useGraphics ) ? ( $"   [{Render_Graphics ( percentage )}]" ) : ( $"-------[{percentage.ToString ( "000.00" )}]" ) )}";
         }
 
         /// <summary>
@@ -392,7 +473,7 @@ namespace BatteryStatus
             string graphic = string.Empty;
             for ( int i = 0; i < 10; i++ )  //  Loop 10 times because each 10% is represented as a '#'.
             {
-                if ( i <= ( _percentage / 10 ) ) //  as long as 'i' is less than procentage devided by 10 print a '#'. [Example: 20 / 10 = 2 = "##"]
+                if ( i < ( _percentage / 10 ) ) //  as long as 'i' is less than procentage devided by 10 print a '#'. [Example: 20 / 10 = 2 = "##"]
                 {
                     graphic += '#';
 

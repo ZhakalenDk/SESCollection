@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scripts", "Scripts\Scripts.csproj", "{E0C627EA-5761-4804-8208-BA2BEAC9D067}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TNRCodeIntepritor", "TNRCodeIntepritor\TNRCodeIntepritor.csproj", "{1303608D-7298-495B-B298-80D01223F3D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{E0C627EA-5761-4804-8208-BA2BEAC9D067}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0C627EA-5761-4804-8208-BA2BEAC9D067}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0C627EA-5761-4804-8208-BA2BEAC9D067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1303608D-7298-495B-B298-80D01223F3D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1303608D-7298-495B-B298-80D01223F3D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1303608D-7298-495B-B298-80D01223F3D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1303608D-7298-495B-B298-80D01223F3D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
