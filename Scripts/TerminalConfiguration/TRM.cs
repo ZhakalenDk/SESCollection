@@ -70,193 +70,429 @@ namespace TRM
             List<IMyTerminalBlock> allBlocks = new List<IMyTerminalBlock> ();
             GridTerminalSystem.GetBlocks ( allBlocks );
 
-
-
             if ( code.Length > 0 )
             {
                 Interpreter.Interprete ( code );
 
-                Rename_Block ( allBlocks );
+                Modify_Block ( allBlocks );
             }
         }
 
-        private void Rename_Block ( List<IMyTerminalBlock> _allBlocks )
+        /// <summary>
+        /// Renmaming the actual blocks
+        /// </summary>
+        /// <param name="_allBlocks"></param>
+        private void Modify_Block ( List<IMyTerminalBlock> _allBlocks )
         {
+            Interpreter.BlockDetails block;
             for ( int i = 0; i < _allBlocks.Count; i++ )
             {
-                if ( _allBlocks [i] is IMyAirtightDoorBase )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "hangarDoor" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyAirtightSlideDoor )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "slidingDoor" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyAirVent )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "vent" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyArtificialMassBlock )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "massBlock" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyAssembler )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "assembler" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyBatteryBlock )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "battery" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyBeacon )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "beacon" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyButtonPanel )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "buttenPanel" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyCameraBlock )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "camera" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyCargoContainer )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "container" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyCockpit )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "cockpit" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyCollector )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "collector" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyControlPanel )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "controlPanel" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyConveyorSorter )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "sorter" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyCryoChamber )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "cryopod" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyDecoy )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "decoy" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyDoor )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "door" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyGasGenerator )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "gasGen" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyGasTank )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    if ( _allBlocks [i].DetailedInfo.Split ( '\n' ) [0].Remove ( 0, 4 ) == "Hydrogen Tank" )
-                    {
-                        _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "h2Tank" ).BlockString ();
-                    }
-                    else if ( _allBlocks [i].DetailedInfo.Split ( '\n' ) [0].Remove ( 0, 4 ) == "Oxygen Tank" )
-                    {
-                        _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "o2Tank" ).BlockString ();
-                    }
-                }
-                else if ( _allBlocks [i] is IMyGravityGenerator )
-                {
-                    Interpreter.BlockDetails block = Interpreter.Blocks.Find ( item => item.Type == "gravGen" );
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = block.BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyGyro )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "gyro" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyInteriorLight )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "interiorLight" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyJumpDrive )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "jumpDrive" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyLandingGear )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "gear" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyMedicalRoom )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "medbay" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyOreDetector )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "oreDetector" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyProgrammableBlock )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "program" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyReactor )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "reactor" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyRefinery )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "refinery" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyRemoteControl )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "remote" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMySensorBlock )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "sensor" ).BlockString ();
-                }
-                else if ( _allBlocks [i] is IMyShipConnector )
-                {
-                    Echo ( $"Renaming: {_allBlocks [i].CustomName}" );
-                    _allBlocks [i].CustomName = Interpreter.Blocks.Find ( item => item.Type == "connector" ).BlockString ();
-                }
-                else
+                if ( _allBlocks [i].CubeGrid.CustomName != Me.CubeGrid.CustomName )
                 {
                     continue;
                 }
+
+                #region Block Definitoons
+                if ( _allBlocks [i] is IMyAirtightHangarDoor )
+                {
+
+                    if ( Search_For_Details ( "hangarDoor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyAirtightSlideDoor )
+                {
+                    if ( Search_For_Details ( "slidingDoor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyAirVent )
+                {
+                    if ( Search_For_Details ( "vent", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyArtificialMassBlock )
+                {
+                    if ( Search_For_Details ( "mass", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyAssembler )
+                {
+                    if ( Search_For_Details ( "assembler", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyBatteryBlock )
+                {
+                    if ( Search_For_Details ( "battery", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyBeacon )
+                {
+                    if ( Search_For_Details ( "beacon", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyButtonPanel )
+                {
+                    if ( Search_For_Details ( "buttonPanel", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyCameraBlock )
+                {
+                    if ( Search_For_Details ( "camera", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyCargoContainer )
+                {
+                    if ( Search_For_Details ( "container", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyCockpit )
+                {
+                    if ( Search_For_Details ( "cockpit", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyCollector )
+                {
+                    if ( Search_For_Details ( "collector", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyControlPanel )
+                {
+                    if ( Search_For_Details ( "controlPanel", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyConveyorSorter )
+                {
+                    if ( Search_For_Details ( "sorter", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyCryoChamber )
+                {
+                    if ( Search_For_Details ( "cryopod", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyDecoy )
+                {
+                    if ( Search_For_Details ( "decoy", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyDoor )
+                {
+                    if ( Search_For_Details ( "door", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyGasGenerator )
+                {
+                    if ( Search_For_Details ( "gasGen", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyGasTank )
+                {
+                    string subType = _allBlocks [i].DetailedInfo.Split ( '\n' ) [0].Split ( ':' ) [1].Trim ();
+                    if ( subType.Contains ( "Hydrogen" ) )
+                    {
+                        if ( Search_For_Details ( "h2Tank", out block ) )
+                        {
+                            Rename ( _allBlocks [i], block.BlockString () );
+                            _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                        }
+                    }
+                    else if ( subType.Contains ( "Oxygen" ) )
+                    {
+                        if ( Search_For_Details ( "o2Tank", out block ) )
+                        {
+                            Rename ( _allBlocks [i], block.BlockString () );
+                            _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                        }
+                    }
+
+                }
+                else if ( _allBlocks [i] is IMyGravityGenerator )
+                {
+                    if ( Search_For_Details ( "gravGen", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyGyro )
+                {
+                    if ( Search_For_Details ( "gyro", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyJumpDrive )
+                {
+                    if ( Search_For_Details ( "jumpDrive", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyLandingGear )
+                {
+                    if ( Search_For_Details ( "gear", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyLightingBlock )
+                {
+                    if ( Search_For_Details ( "light", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyMedicalRoom )
+                {
+                    if ( Search_For_Details ( "medbay", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyMotorAdvancedStator )
+                {
+                    if ( Search_For_Details ( "advancedRotor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyMotorStator )
+                {
+                    if ( Search_For_Details ( "rotor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyMotorSuspension )
+                {
+                    if ( Search_For_Details ( "wheel", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyOreDetector )
+                {
+                    if ( Search_For_Details ( "oreDectector", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyOxygenFarm )
+                {
+                    if ( Search_For_Details ( "o2Farm", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyParachute )
+                {
+                    if ( Search_For_Details ( "parachute", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyPistonBase )
+                {
+                    if ( Search_For_Details ( "piston", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyProjector )
+                {
+                    if ( Search_For_Details ( "projector", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyRadioAntenna )
+                {
+                    if ( Search_For_Details ( "antenna", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyReactor )
+                {
+                    if ( Search_For_Details ( "reactor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyRefinery )
+                {
+                    if ( Search_For_Details ( "refinery", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyRemoteControl )
+                {
+                    if ( Search_For_Details ( "remote", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMySensorBlock )
+                {
+                    if ( Search_For_Details ( "sensor", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyShipConnector )
+                {
+                    if ( Search_For_Details ( "connector", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyShipDrill )
+                {
+                    if ( Search_For_Details ( "drill", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyShipGrinder )
+                {
+                    if ( Search_For_Details ( "grinder", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyShipMergeBlock )
+                {
+                    if ( Search_For_Details ( "merge", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyShipWelder )
+                {
+                    if ( Search_For_Details ( "welder", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMySolarPanel )
+                {
+                    if ( Search_For_Details ( "solar", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyTextPanel )
+                {
+                    if ( Search_For_Details ( "lcd", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyTimerBlock )
+                {
+                    if ( Search_For_Details ( "timer", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                #endregion
             }
+        }
+
+        private void Rename ( IMyTerminalBlock _block, string _newName )
+        {
+            _block.CustomName =_newName;
+        }
+
+        private bool Search_For_Details ( string _type, out Interpreter.BlockDetails _block )
+        {
+            _block = Interpreter.Blocks.Find ( item => item.Type == _type );
+
+            if ( _block != null )
+            {
+                return true;
+            }
+            return false;
         }
 
         private string Get_Custom_Data ()
@@ -272,6 +508,7 @@ namespace TRM
             private static string G_Info;
             private static string G_Room;
             private static string G_GridName;
+            private static bool G_ShowInTerminal;
             public static string GridName { get; set; }
 
             //  Find wrapping values
@@ -383,7 +620,7 @@ namespace TRM
                             {
                                 if ( Get_Token ( _lines [j] ) [0] == "/naming" )
                                 {
-                                    BlockDetails block = new BlockDetails ( tokenSubValue, G_Name, G_Info, G_Room, G_GridName );
+                                    BlockDetails block = new BlockDetails ( tokenSubValue, G_Name, G_Info, G_Room, G_GridName, G_ShowInTerminal );
                                     Blocks.Add ( block );
                                     NumberOfBlocks++;
                                 }
@@ -411,7 +648,7 @@ namespace TRM
                 string [] statementSplit = _statement.Split ( '=' );
 
                 //  Statement values
-                string token = statementSplit [0];
+                string token = statementSplit [0].TrimStart(' ');
                 string value = statementSplit [1];
 
 
@@ -443,6 +680,16 @@ namespace TRM
                         break;
                     case "gridName":
                         G_GridName = Eva_Value ( value );
+                        break;
+                    case "show":
+                        if ( value == "true" )
+                        {
+                            G_ShowInTerminal = true;
+                        }
+                        else if ( value == "false" )
+                        {
+                            G_ShowInTerminal = false;
+                        }
                         break;
                     default:
                         break;
@@ -567,7 +814,7 @@ namespace TRM
             /// <summary>
             /// Details on the ingame block
             /// </summary>
-            public struct BlockDetails
+            public class BlockDetails
             {
                 /// <summary>
                 /// Type of the block
@@ -589,7 +836,13 @@ namespace TRM
                 /// The name of the grid this block is placed on
                 /// </summary>
                 public string GridName { get; }
+                public bool ShowInTerminal { get; }
 
+                /// <summary>
+                /// Based on the order of formatting
+                /// </summary>
+                /// <param name="_order"></param>
+                /// <returns></returns>
                 private string Get_Value ( int _order )
                 {
                     switch ( _order )
@@ -627,13 +880,14 @@ namespace TRM
                 /// <param name="_info">Info on the block</param>
                 /// <param name="_room">Room the block is located in</param>
                 /// <param name="_gridName">The name of the grid this block is placed on</param>
-                public BlockDetails ( string _type, string _name, string _info, string _room, string _gridName )
+                public BlockDetails ( string _type, string _name, string _info, string _room, string _gridName, bool _showInTerminal = true )
                 {
                     Type = _type;
                     Name = _name;
                     Info = _info;
                     Room = _room;
                     GridName = _gridName;
+                    ShowInTerminal = _showInTerminal;
                 }
 
                 public override string ToString ()

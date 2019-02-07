@@ -113,7 +113,7 @@
     <Compile Include="TerminalConfiguration\TRM.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TerminalConfiguration\TRMAPI.txt" />
+    <None Include="TerminalConfiguration\TRMAPI.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
