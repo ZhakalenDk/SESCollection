@@ -1,4 +1,4 @@
-﻿# The Language
+# The Language
 The TRM language is a language used inside the Programmable Block's custom data.
 It's used to customize the display-name of different terminal blocks.
 With this language the user can define name, info, room and grid name.
