@@ -165,6 +165,8 @@ Like with all wrapping keywords, the right side of the comma (_,_) is used in fr
    - Used to acces the _Parachutes_ on a grid. Example: ```<naming=parachute>```
 - ```piston```
    - Used to acces the _Pistons_ on a grid. Example: ```<naming=piston>```
+- ```program```
+   - Used to acces the _Programmable Blocks_ on a grid. Example: ```<naming=program>```
 - ```projector```
    - Used to acces the _Projector_ on a grid. Example: ```<naming=projector>```
 - ```antenna```
@@ -191,5 +193,7 @@ Like with all wrapping keywords, the right side of the comma (_,_) is used in fr
    - Used to acces the _Solar Panels_ on a grid. Example: ```<naming=solar>```
 - ```lcd```
    - Used to acces the _LCD Panels_ on a grid. Example: ```<naming=lcd>```
+ - ```thruster```
+   - Used to acces the _Thrusters_ on a grid. Example: ```<naming=thruster>```
 - ```timer```
    - Used to acces the _Timers_ on a grid. Example: ```<naming=timer>```

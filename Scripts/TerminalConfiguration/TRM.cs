@@ -91,7 +91,6 @@ namespace TRM
                 {
                     continue;
                 }
-
                 #region Block Definitoons
                 if ( _allBlocks [i] is IMyAirtightHangarDoor )
                 {
@@ -363,6 +362,14 @@ namespace TRM
                         _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
                     }
                 }
+                else if ( _allBlocks [i] is IMyProgrammableBlock )
+                {
+                    if ( Search_For_Details ( "program", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
                 else if ( _allBlocks [i] is IMyProjector )
                 {
                     if ( Search_For_Details ( "projector", out block ) )
@@ -462,6 +469,14 @@ namespace TRM
                 else if ( _allBlocks [i] is IMyTextPanel )
                 {
                     if ( Search_For_Details ( "lcd", out block ) )
+                    {
+                        Rename ( _allBlocks [i], block.BlockString () );
+                        _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
+                    }
+                }
+                else if ( _allBlocks [i] is IMyThrust )
+                {
+                    if ( Search_For_Details ( "thruster", out block ) )
                     {
                         Rename ( _allBlocks [i], block.BlockString () );
                         _allBlocks [i].ShowInTerminal = block.ShowInTerminal;
